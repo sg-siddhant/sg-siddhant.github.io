@@ -20,12 +20,14 @@
                 var layerGSM = parseFloat(document.getElementById("layer" + i + "GSM").value);
                 var layerBF = parseFloat(document.getElementById("layer" + i + "BF").value);
                 var layerShade = document.getElementById("layer" + i + "Shade").value;
+                var layerWidth = parseFloat(document.getElementById("layer" + i + "Width").value);
                 
                 layers.push({
                     type: layerType,
                     gsm: layerGSM,
                     bf: layerBF,
-                    shade: layerShade
+                    shade: layerShade,
+                    width: layerWidth
                 });
             }
 
@@ -38,10 +40,10 @@
             
             var totalPaperWeightPerBox = 0;
             for (var i = 0; i < layers.length; i++) {
-                var layerWeightPerBox = ((((length * width) / 1000000) * layers[i].gsm) / boxPerSheet).toFixed(3);
+                var layerWeightPerBox = ((((length * layers[i].width) / 1000000) * layers[i].gsm) / boxPerSheet).toFixed(3);
                 totalPaperWeightPerBox += parseFloat(layerWeightPerBox);
                 
-                resultText += "Layer " + (i + 1) + " - Type: " + layers[i].type + ", GSM: " + layers[i].gsm + ", BF: " + layers[i].bf + ", Shade: " + layers[i].shade + ", Weight Per Box: " + layerWeightPerBox + " kg<br>";
+                resultText += "Layer " + (i + 1) + " - Type: " + layers[i].type + ", GSM: " + layers[i].gsm + ", BF: " + layers[i].bf + ", Shade: " + layers[i].shade + ", Width: " + layers[i].width + " mm, Weight Per Box: " + layerWeightPerBox + " kg<br>";
             }
 
             var totalPaperWeightRequired = (totalPaperWeightPerBox * numberOfBoxes).toFixed(3);
@@ -154,6 +156,10 @@
                             <option value="Sony Gold">Sony Gold</option>
                             <option value="Korean Shade">Korean Shade</option>
                         </select>
+                    </div>
+                    <div>
+                        <label for="layer${i}Width">Width (mm):</label>
+                        <input type="number" id="layer${i}Width" step="0.01" required>
                     </div>
                 `;
 
