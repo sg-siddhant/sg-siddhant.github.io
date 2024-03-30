@@ -6,6 +6,7 @@
         function calculatePaperRequirements() {
             var productCode = document.getElementById("productCode").value;
             var boxName = document.getElementById("boxName").value;
+            var buyerName = document.getElementById("buyerName").value;
             var lengthValue = parseFloat(document.getElementById("length").value);
             var lengthUnit = document.getElementById("lengthUnit").value;
             var widthValue = parseFloat(document.getElementById("width").value);
@@ -33,7 +34,8 @@
             var width = convertToMM(widthValue, widthUnit);
 
             var resultText = "<strong>Product Code:</strong> " + productCode + "<br>" +
-                "<strong>Box Name:</strong> " + boxName + "<br><br>" +
+                "<strong>Box Name:</strong> " + boxName + "<br>" +
+                "<strong>Buyer Name:</strong> " + buyerName + "<br><br>" +
                 "<strong>Paper Requirements:</strong><br>";
             
             var totalPaperWeightPerBox = 0;
@@ -45,12 +47,9 @@
             }
 
             var totalPaperWeightRequired = (totalPaperWeightPerBox * numberOfBoxes).toFixed(3);
-            var boxArea = (length * width) / 1000000;
-            var totalPaperAreaRequired = (boxArea * numberOfBoxes).toFixed(2);
 
             resultText += "<br>Total Paper Weight Per Box: " + totalPaperWeightPerBox.toFixed(3) + " kg<br>" +
-                "Total Paper Weight Required: " + totalPaperWeightRequired + " kg<br>" +
-                "Total Paper Area Required: " + totalPaperAreaRequired + " sq. meters";
+                "Total Paper Weight Required: " + totalPaperWeightRequired + " kg";
 
             document.getElementById("result").innerHTML = resultText;
         }
@@ -77,6 +76,10 @@
     <div>
         <label for="boxName">Box Name:</label>
         <input type="text" id="boxName" required>
+    </div>
+    <div>
+        <label for="buyerName">Buyer Name:</label>
+        <input type="text" id="buyerName" required>
     </div>
     <div>
         <label for="length">Length:</label>
