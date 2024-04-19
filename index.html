@@ -1,172 +1,223 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Corrugated Box Paper Requirements Calculator</title>
-    <script>
-        function calculatePaperRequirements() {
-            var productCode = document.getElementById("productCode").value;
-            var boxName = document.getElementById("boxName").value;
-            var buyerName = document.getElementById("buyerName").value;
-            var lengthValue = parseFloat(document.getElementById("length").value);
-            var lengthUnit = document.getElementById("lengthUnit").value;
-            var widthValue = parseFloat(document.getElementById("width").value);
-            var widthUnit = document.getElementById("widthUnit").value;
-            var numberOfBoxes = parseInt(document.getElementById("numberOfBoxes").value);
-            var ply = parseInt(document.getElementById("ply").value);
-            var boxPerSheet = parseInt(document.getElementById("boxPerSheet").value);
-            
-            var layers = [];
-            for (var i = 1; i <= ply; i++) {
-                var layerType = document.getElementById("layer" + i + "Type").value;
-                var layerGSM = parseFloat(document.getElementById("layer" + i + "GSM").value);
-                var layerBF = parseFloat(document.getElementById("layer" + i + "BF").value);
-                var layerShade = document.getElementById("layer" + i + "Shade").value;
-                
-                layers.push({
-                    type: layerType,
-                    gsm: layerGSM,
-                    bf: layerBF,
-                    shade: layerShade
-                });
-            }
-
-            var length = convertToMM(lengthValue, lengthUnit);
-            var width = convertToMM(widthValue, widthUnit);
-
-            var resultText = "<strong>Product Code:</strong> " + productCode + "<br>" +
-                "<strong>Box Name:</strong> " + boxName + "<br>" +
-                "<strong>Buyer Name:</strong> " + buyerName + "<br><br>" +
-                "<strong>Paper Requirements:</strong><br>";
-            
-            var totalPaperWeightPerBox = 0;
-            for (var i = 0; i < layers.length; i++) {
-                var layerWeightPerBox = ((((length * width) / 1000000) * layers[i].gsm) / boxPerSheet).toFixed(3);
-                totalPaperWeightPerBox += parseFloat(layerWeightPerBox);
-                
-                resultText += "Layer " + (i + 1) + " - Type: " + layers[i].type + ", Size (Width): " + width + " mm, GSM: " + layers[i].gsm + ", BF: " + layers[i].bf + ", Shade: " + layers[i].shade + ", Weight Per Box: " + layerWeightPerBox + " kg<br>";
-            }
-
-            var totalPaperWeightRequired = (totalPaperWeightPerBox * numberOfBoxes).toFixed(3);
-
-            resultText += "<br>Total Paper Weight Per Box: " + totalPaperWeightPerBox.toFixed(3) + " kg<br>" +
-                "Total Paper Weight Required: " + totalPaperWeightRequired + " kg";
-
-            document.getElementById("result").innerHTML = resultText;
-        }
-
-        function convertToMM(value, unit) {
-            switch (unit) {
-                case "cm":
-                    return value * 10;
-                case "inch":
-                    return value * 25.4;
-                case "mm":
-                default:
-                    return value;
-            }
-        }
-    </script>
+  <title>Sheet Size Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 5px;
+    }
+    
+    .form-group select {
+      width: 100%;
+      padding: 5px;
+    }
+    
+    .form-group button {
+      padding: 10px 20px;
+    }
+    
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    
+    .formula {
+      margin-top: 10px;
+      font-style: italic;
+    }
+    
+    .note {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-    <h2>Corrugated Box Paper Requirements Calculator</h2>
-    <div>
-        <label for="productCode">Product Code:</label>
-        <input type="text" id="productCode" required>
+  <div class="container">
+    <h1>Sheet Size Calculator</h1>
+    
+    <div class="form-group">
+      <label for="boxType">Box Type:</label>
+      <select id="boxType">
+        <option value="HSC">Half Slotted Container (HSC)</option>
+        <option value="RSC">Regular Slotted Container (RSC)</option>
+        <option value="FOL">Full Overlap Slotted Container (FOL)</option>
+        <option value="CSSC">Center Special Slotted Container (CSSC)</option>
+        <option value="SFF">Center Special Full Overlap Slotted Container (SFF)</option>
+        <option value="SnapBottom">Snap or 1-2-3 Bottom Container with Tuck Top</option>
+        <option value="HamperStyle">Full Bottom File Box, Hamper Style</option>
+        <option value="Bellows">Bellows Style Top and Bottom Container</option>
+      </select>
     </div>
-    <div>
-        <label for="boxName">Box Name:</label>
-        <input type="text" id="boxName" required>
+    
+    <div class="form-group">
+      <label for="length">Length (L):</label>
+      <input type="number" id="length" placeholder="Enter length">
     </div>
-    <div>
-        <label for="buyerName">Buyer Name:</label>
-        <input type="text" id="buyerName" required>
+    
+    <div class="form-group">
+      <label for="width">Width (W):</label>
+      <input type="number" id="width" placeholder="Enter width">
     </div>
-    <div>
-        <label for="length">Length:</label>
-        <input type="number" id="length" step="0.01" required>
-        <select id="lengthUnit">
-            <option value="mm">mm</option>
-            <option value="cm">cm</option>
-            <option value="inch">inch</option>
-        </select>
+    
+    <div class="form-group">
+      <label for="height">Height (H):</label>
+      <input type="number" id="height" placeholder="Enter height">
     </div>
-    <div>
-        <label for="width">Width:</label>
-        <input type="number" id="width" step="0.01" required>
-        <select id="widthUnit">
-            <option value="mm">mm</option>
-            <option value="cm">cm</option>
-            <option value="inch">inch</option>
-        </select>
+    
+    <div class="form-group">
+      <label for="flapOverlap">Flap/Overlap Measurement:</label>
+      <input type="number" id="flapOverlap" placeholder="Enter flap/overlap measurement" value="35">
+      <span class="tooltip">&#9432;
+        <span class="tooltiptext">Additional length for flaps and overlaps to close the box properly.</span>
+      </span>
     </div>
-    <div>
-        <label for="numberOfBoxes">Number of Boxes:</label>
-        <input type="number" id="numberOfBoxes" min="1" required>
+    
+    <div class="form-group">
+      <label for="extraMeasurement">Extra Measurement:</label>
+      <input type="number" id="extraMeasurement" placeholder="Enter extra measurement" value="60">
+      <span class="tooltip">&#9432;
+        <span class="tooltiptext">Additional length or width for specific box design requirements.</span>
+      </span>
     </div>
-    <div>
-        <label for="ply">Ply:</label>
-        <select id="ply">
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="7">7</option>
-        </select>
+    
+    <div class="form-group">
+      <button onclick="calculateSheetSize()">Calculate</button>
     </div>
-    <div>
-        <label for="boxPerSheet">Box Per Sheet:</label>
-        <input type="number" id="boxPerSheet" min="1" required>
+    
+    <div class="result" id="result"></div>
+    <div class="formula" id="formula"></div>
+    
+    <div class="note">
+      Note: The formulas include additional measurements for flaps, overlaps, and other box features. These measurements may vary based on the specific requirements of the box manufacturer or customer.
     </div>
-    <div id="layerSpecifications"></div>
-    <button onclick="calculatePaperRequirements()">Calculate</button>
-    <p id="result"></p>
-
-    <script>
-        var plySelect = document.getElementById("ply");
-        var layerSpecificationsDiv = document.getElementById("layerSpecifications");
-
-        plySelect.addEventListener("change", function() {
-            var ply = parseInt(plySelect.value);
-            layerSpecificationsDiv.innerHTML = "";
-
-            for (var i = 1; i <= ply; i++) {
-                var layerHtml = `
-                    <h3>Layer ${i} Specifications</h3>
-                    <div>
-                        <label for="layer${i}Type">Paper Type:</label>
-                        <select id="layer${i}Type">
-                            <option value="Kraft">Kraft</option>
-                            <option value="Duplex">Duplex</option>
-                            <option value="Duplex Grey Back">Duplex Grey Back</option>
-                            <option value="HWC">HWC</option>
-                            <option value="LWC">LWC</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="layer${i}GSM">GSM:</label>
-                        <input type="number" id="layer${i}GSM" step="0.01" required>
-                    </div>
-                    <div>
-                        <label for="layer${i}BF">BF:</label>
-                        <input type="number" id="layer${i}BF" step="0.01" required>
-                    </div>
-                    <div>
-                        <label for="layer${i}Shade">Shade:</label>
-                        <select id="layer${i}Shade">
-                            <option value="Natural">Natural</option>
-                            <option value="Yellow Golden">Yellow Golden</option>
-                            <option value="Reddish Golden">Reddish Golden</option>
-                            <option value="Sony Gold">Sony Gold</option>
-                            <option value="Korean Shade">Korean Shade</option>
-                            <option value="White">White</option>
-                        </select>
-                    </div>
-                `;
-
-                layerSpecificationsDiv.innerHTML += layerHtml;
-            }
-        });
-
-        // Trigger the change event on page load to populate the initial layer specifications
-        plySelect.dispatchEvent(new Event("change"));
-    </script>
+  </div>
+  
+  <script>
+    function calculateSheetSize() {
+      var boxType = document.getElementById("boxType").value;
+      var length = parseFloat(document.getElementById("length").value);
+      var width = parseFloat(document.getElementById("width").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var flapOverlap = parseFloat(document.getElementById("flapOverlap").value);
+      var extraMeasurement = parseFloat(document.getElementById("extraMeasurement").value);
+      
+      var sheetLength = 0;
+      var sheetWidth = 0;
+      var formula = "";
+      
+      switch (boxType) {
+        case "HSC":
+          sheetLength = height + 0.5 * width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + 0.5 * W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "RSC":
+          sheetLength = height + width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "FOL":
+          sheetLength = height + 2 * width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + 2 * W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "CSSC":
+          sheetLength = height + length + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + L + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "SFF":
+          sheetLength = height + 2 * width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + 2 * W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "SnapBottom":
+          sheetLength = height + 1.75 * width + flapOverlap + 50;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + 1.75 * W + " + flapOverlap + " + 50<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "HamperStyle":
+          sheetLength = 2 * height + 0.5 * width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = 2 * H + 0.5 * W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+        case "Bellows":
+          sheetLength = height + width + flapOverlap;
+          sheetWidth = 2 * length + 2 * width + extraMeasurement;
+          formula = "Sheet Length = H + W + " + flapOverlap + "<br>" +
+                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement;
+          break;
+      }
+      
+      var resultElement = document.getElementById("result");
+      resultElement.innerHTML = "Sheet Length: " + sheetLength.toFixed(2) + " mm<br>" +
+                                "Sheet Width: " + sheetWidth.toFixed(2) + " mm";
+      
+      var formulaElement = document.getElementById("formula");
+      formulaElement.innerHTML = "Formula:<br>" + formula;
+    }
+  </script>
 </body>
 </html>
