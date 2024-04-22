@@ -114,22 +114,22 @@
     </div>
     
     <div class="form-group">
-      <label for="length">Length (L):</label>
-      <input type="number" id="length" placeholder="Enter length in inches">
+      <label for="length">Length (Cut):</label>
+      <input type="number" id="length" placeholder="Enter length (Cut) in inches">
     </div>
     
     <div class="form-group">
-      <label for="width">Width (W):</label>
-      <input type="number" id="width" placeholder="Enter width in inches">
+      <label for="width">Width (Deckle):</label>
+      <input type="number" id="width" placeholder="Enter width (Deckle) in inches">
     </div>
     
     <div class="form-group">
-      <label for="height">Height (H):</label>
+      <label for="height">Height:</label>
       <input type="number" id="height" placeholder="Enter height in inches">
     </div>
     
     <div class="form-group">
-      <label for="flapOverlap">Flap/Overlap Measurement:</label>
+      <label for="flapOverlap">Flap/Overlap:</label>
       <input type="number" id="flapOverlap" placeholder="Enter flap/overlap in inches" value="35">
       <span class="tooltip">&#9432;
         <span class="tooltiptext">Additional length for flaps and overlaps to close the box properly.</span>
@@ -166,8 +166,8 @@
       var unit = document.getElementById("unit").value;
       var unitText = unit === "inch" ? "inches" : unit;
       
-      document.getElementById("length").placeholder = "Enter length in " + unitText;
-      document.getElementById("width").placeholder = "Enter width in " + unitText;
+      document.getElementById("length").placeholder = "Enter length (Cut) in " + unitText;
+      document.getElementById("width").placeholder = "Enter width (Deckle) in " + unitText;
       document.getElementById("height").placeholder = "Enter height in " + unitText;
       document.getElementById("flapOverlap").placeholder = "Enter flap/overlap in " + unitText;
       document.getElementById("extraMeasurement").placeholder = "Enter extra measurement in " + unitText;
@@ -206,50 +206,50 @@
         case "HSC":
           sheetLength = height + 0.5 * width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + 0.5 * W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + 0.5 * Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "RSC":
           sheetLength = height + width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "FOL":
           sheetLength = height + 2 * width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + 2 * W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + 2 * Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "CSSC":
           sheetLength = height + length + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + L + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + Length (Cut) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "SFF":
           sheetLength = height + 2 * width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + 2 * W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + 2 * Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "SnapBottom":
           sheetLength = height + 1.75 * width + flapOverlap + 50;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + 1.75 * W + " + flapOverlap.toFixed(2) + " mm + 50 mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + 1.75 * Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap) + 50 mm<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "HamperStyle":
           sheetLength = 2 * height + 0.5 * width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = 2 * H + 0.5 * W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = 2 * Height + 0.5 * Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
         case "Bellows":
           sheetLength = height + width + flapOverlap;
           sheetWidth = 2 * length + 2 * width + extraMeasurement;
-          formula = "Sheet Length = H + W + " + flapOverlap.toFixed(2) + " mm<br>" +
-                    "Sheet Width = 2 * L + 2 * W + " + extraMeasurement.toFixed(2) + " mm";
+          formula = "Sheet Length (Cut) = Height + Width (Deckle) + " + flapOverlap.toFixed(2) + " mm (Flap/Overlap)<br>" +
+                    "Sheet Width (Deckle) = 2 * Length (Cut) + 2 * Width (Deckle) + " + extraMeasurement.toFixed(2) + " mm (Extra Measurement)";
           break;
       }
       
@@ -258,8 +258,8 @@
       var totalSheetWidth = sheetWidth;
       
       var resultElement = document.getElementById("result");
-      resultElement.innerHTML = "Total Sheet Length: " + totalSheetLength.toFixed(2) + " mm<br>" +
-                                "Sheet Width: " + totalSheetWidth.toFixed(2) + " mm<br>" +
+      resultElement.innerHTML = "Total Sheet Length (Cut): " + totalSheetLength.toFixed(2) + " mm<br>" +
+                                "Sheet Width (Deckle): " + totalSheetWidth.toFixed(2) + " mm<br>" +
                                 "Number of Boxes: " + numberOfBoxes;
       
       var formulaElement = document.getElementById("formula");
